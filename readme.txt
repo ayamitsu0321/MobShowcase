@@ -1,4 +1,4 @@
-【MOD】MobShowcase_1.3.1_v0.1.4
+【MOD】MobShowcase_1.3.2_v0.1.4
 
 【概要】
 右クリックでGUIを開き、スポーンエッグなどをいれるとmobが表示されます

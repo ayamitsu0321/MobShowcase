@@ -1,0 +1,106 @@
+package ayamitsu.mobshowcase;
+
+import ayamitsu.mobshowcase.common.*;
+
+import net.minecraft.src.*;
+
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.registry.*;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.Property;
+
+import java.util.logging.Level;
+
+@Mod(
+	modid = "MobShowcase",
+	name = "MobSkullsPlus",
+	version = "1.0.0"
+)
+@NetworkMod(
+	clientSideRequired = true,
+	serverSideRequired = false,
+	channels = "mobshowcase",
+	packetHandler = ayamitsu.mobshowcase.common.PacketHandler.class
+)
+public class MobShowcase
+{
+	@Mod.Instance("MobShowcase")
+	public static MobShowcase instance;
+	
+	@SidedProxy(clientSide = "ayamitsu.mobshowcase.client.ClientProxy", serverSide = "ayamitsu.mobshowcase.common.CommonProxy")
+	public static CommonProxy proxy;
+	
+	public static Block showcase_stone;
+	public static Block showcase_glass;
+	public static int showcase_stoneId;
+	public static int showcase_glassId;
+	public static int renderId;
+	
+	@Mod.PreInit
+	public void preInit(FMLPreInitializationEvent event)
+	{
+		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+		
+		try
+		{
+			config.load();
+			int def_1 = 201;
+			int def_2 = 202;
+			Property prop1 = config.getBlock("showcase_stone", def_1);
+			Property prop2 = config.getBlock("showcase_glass", def_2);
+			this.showcase_stoneId = prop1.getInt(def_1);
+			this.showcase_glassId = prop2.getInt(def_2);
+		}
+		catch (Exception e)
+		{
+			FMLLog.log(Level.SEVERE, e, "Error Massage");
+		}
+		finally
+		{
+			config.save();
+		}
+	}
+	
+	@Mod.Init
+	public void init(FMLInitializationEvent event)
+	{
+		this.renderId = proxy.getUniqueRenderId();
+		this.showcase_stone = new BlockMobShowcase(this.showcase_stoneId, Block.stone.blockIndexInTexture, Material.rock, renderId);
+		this.showcase_stone.setHardness(1.0F).setBlockName("Showcase Stone").setCreativeTab(CreativeTabs.tabDecorations);
+		this.showcase_glass = new BlockMobShowcase(this.showcase_glassId, Block.glass.blockIndexInTexture, Material.glass, 0);
+		this.showcase_glass.setHardness(0.3F).setStepSound(Block.soundGlassFootstep).setBlockName("Showcase Glass").setCreativeTab(CreativeTabs.tabDecorations);
+		GameRegistry.registerBlock(this.showcase_stone);
+		GameRegistry.registerBlock(this.showcase_glass);
+		LanguageRegistry.instance().addNameForObject(this.showcase_stone, "en_US", "Showcase Stone");
+		LanguageRegistry.instance().addNameForObject(this.showcase_glass, "en_US", "Showcase Glass");
+		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
+		
+		GameRegistry.addRecipe(new ItemStack(this.showcase_stone.blockID, 2, 0),
+			new Object[] {
+				"XXX",
+				"XYX",
+				'X', Block.stone,
+				'Y', new ItemStack(Item.dyePowder, 1, 4)
+			}
+		);
+		
+		GameRegistry.addRecipe(new ItemStack(this.showcase_glass.blockID, 2, 0),
+			new Object[] {
+				"XXX",
+				"XYX",
+				'X', Block.glass,
+				'Y', new ItemStack(Item.dyePowder, 1, 4)
+			}
+		);
+		
+		this.proxy.load();
+		MobShowcaseRegistry.addReturner(Item.monsterPlacer.shiftedIndex, new MobReturnerSpawnEgg());
+	}
+}
