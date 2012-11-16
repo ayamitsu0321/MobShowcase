@@ -1,10 +1,14 @@
 package ayamitsu.mobshowcase.common;
 
 import net.minecraft.src.*;
+import cpw.mods.fml.common.network.PacketDispatcher;
+
+import java.io.IOException;
 
 public class ContainerMobShowcase extends Container
 {
 	public TileEntityMobShowcase showcase;
+	private boolean slotChanged = false;
 	
 	public ContainerMobShowcase(EntityPlayer player, World world, int blockX, int blockY, int blockZ)
 	{
@@ -28,69 +32,93 @@ public class ContainerMobShowcase extends Container
 	@Override
 	public boolean canInteractWith(EntityPlayer par1EntityPlayer)
     {
-        return showcase.isUseableByPlayer(par1EntityPlayer);
+        return this.showcase.isUseableByPlayer(par1EntityPlayer);
     }
 	
-	/*public ItemStack transferStackInSlot(EntityPlayer player, int par1)
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex)
 	{
-		ItemStack itemstack = null;
-        Slot slot = (Slot)inventorySlots.get(par1);
-
-        if (slot != null && slot.getHasStack())
-        {
-            ItemStack itemstack1 = slot.getStack();
-            itemstack = itemstack1.copy();
-
-            if (par1 == 0)
-            {
-                if (!mergeItemStack(itemstack1, 1, 37, false))//boolean ‚Í¸‡‚©~‡
-                {
-                    return null;
-                }
-            	
-            	slot.onSlotChange(itemstack1, itemstack);
-            }
-        	else if (par1 >= 0 && par1 < 28)
-            {
-            	Item item = itemstack1.getItem();
-            	int i = itemstack1.itemID;
-            	int j = itemstack1.getItemDamage();
-            	Integer[] k = {i, j};
-            	
-            	if (item instanceof ItemMonsterPlacer || MobShowcaseList.getInstance().getEntityID(itemstack1) > -1)
-            	{
-            		if (!mergeItemStack(itemstack1, 0, 1, false))
-            		{
-            			return null;
-            		}
-            	}
-                else if (!mergeItemStack(itemstack1, 28, 37, false))
-                {
-                    return null;
-                }
-            }
-            else if (par1 >= 28 && par1 < 37 && !mergeItemStack(itemstack1, 1, 28, false))
-            {
-                return null;
-            }
-        	
-        	if (itemstack1.stackSize == 0)
-            {
-                slot.putStack((ItemStack)null);
-            }
-            else
-            {
-                slot.onSlotChanged();
-            }
-
-            if (itemstack1.stackSize == itemstack.stackSize)
-            {
-                return null;
-            }
-
-            slot.onPickupFromSlot(itemstack1);
-        }
-
-        return itemstack;
-	}*/
+		ItemStack is = null;
+		Slot slot = (Slot)this.inventorySlots.get(slotIndex);
+		
+		if (slot != null && slot.getHasStack())
+		{
+			ItemStack is1 = slot.getStack();
+			is = is1.copy();
+			
+			if (slotIndex == 0)
+			{
+				if (!this.mergeItemStack(is1, 1, 37, true))
+				{
+					return null;
+				}
+				
+				slot.onSlotChange(is1, is);
+			}
+			else if (slotIndex > 0 && slotIndex < 28)
+			{
+				if (MobShowcaseRegistry.contains(is1))
+				{
+					if (!this.mergeItemStack(is1, 0, 1, false))
+					{
+						return null;
+					}
+				}
+				else if (!this.mergeItemStack(is1, 28, 37, false))
+				{
+					return null;
+				}
+			}
+			else if (slotIndex >= 28 && slotIndex < 37 && !this.mergeItemStack(is1, 1, 28, false))
+			{
+				return null;
+			}
+			
+			if (is1.stackSize == 0)
+			{
+				slot.putStack((ItemStack)null);
+			}
+			else
+			{
+				slot.onSlotChanged();
+			}
+			
+			if (is1.stackSize == is.stackSize)
+			{
+				return null;
+			}
+			
+			slot.onPickupFromSlot(player, is1);
+		}
+		
+		return is;
+	}
+	
+	@Override
+	public void onCraftGuiClosed(EntityPlayer player)
+	{
+		super.onCraftGuiClosed(player);
+		SlotMobShowcase.hasInit = 0;
+		System.out.println("on close");
+		
+		if (this.showcase.getWorldObj().isRemote)
+		{
+			System.out.println("on close remote");
+			
+			try
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				this.showcase.writeToNBT(nbttagcompound);
+				byte[] data = CompressedStreamTools.compress(nbttagcompound);
+				PacketDispatcher.sendPacketToServer(new Packet250CustomPayload("mobshowcase", data));
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			
+			//PacketDispatcher.sendPacketToServer(new PacketMobShowcase("Slot", this.showcase.xCoord, this.showcase.yCoord, this.showcase.zCoord, nbttagcompound));
+			//PacketDispatcher.sendPacketToServer(this.showcase.getDescriptionPacket());
+		}
+	}
 }

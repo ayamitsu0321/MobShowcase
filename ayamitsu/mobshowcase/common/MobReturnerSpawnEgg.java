@@ -18,7 +18,21 @@ public class MobReturnerSpawnEgg implements IMobReturner
 		}
 		else
 		{
-			return EntityList.entityEggs.containsKey(is.getItemDamage()) ? EntityList.createEntityByID(is.getItemDamage(), world) : null;
+			if (EntityList.entityEggs.containsKey(is.getItemDamage()))
+			{
+				Entity entity = EntityList.createEntityByID(is.getItemDamage(), world);
+				
+				if (entity instanceof EntityLiving)
+				{
+					((EntityLiving)entity).initCreature();
+				}
+				
+				return entity;
+			}
+			else
+			{
+				return null;
+			}
 		}
 	}
 }

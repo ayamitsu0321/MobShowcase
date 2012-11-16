@@ -14,10 +14,10 @@ public final class MobShowcaseRegistry
 	private static boolean hasInit = false;
 	private static Multimap<Integer, IMobReturner> returnerMap;
 	
-	public static void addReturner(int id, IMobReturner returner)
+	public static void addReturner(int itemID, IMobReturner returner)
 	{
 		init();
-		returnerMap.put(Integer.valueOf(id), returner);
+		returnerMap.put(Integer.valueOf(itemID), returner);
 	}
 	
 	public static boolean contains(ItemStack is)

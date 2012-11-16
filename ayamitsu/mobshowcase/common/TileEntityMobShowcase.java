@@ -1,6 +1,10 @@
 package ayamitsu.mobshowcase.common;
 
 import net.minecraft.src.*;
+import java.io.*;
+import java.util.zip.GZIPOutputStream;
+import java.util.zip.GZIPInputStream;
+import java.util.List;
 
 public class TileEntityMobShowcase extends TileEntity implements IInventory
 {
@@ -154,11 +158,30 @@ public class TileEntityMobShowcase extends TileEntity implements IInventory
 		this.isRotate = par1NBTTagCompound.getBoolean("isDisplay");
 		this.delay = par1NBTTagCompound.getFloat("Delay");
 		
-		NBTTagCompound nbttagcompound2 = par1NBTTagCompound.getCompoundTag("Mob");
+		NBTTagCompound entityNBT = par1NBTTagCompound.getCompoundTag("Mob");
+		NBTTagCompound dataWatcherNBT = par1NBTTagCompound.getCompoundTag("DataWatcher");
 		
-		if (nbttagcompound2 != null)
+		if (entityNBT != null)
 		{
-			this.mob = EntityList.createEntityFromNBT(nbttagcompound2, this.worldObj);
+			this.mob = EntityList.createEntityFromNBT(entityNBT, this.worldObj);
+			
+			/*try
+			{
+				// NBT‚©‚çwrite
+				// DataWatcher‚Éread‚³‚¹‚é
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				DataOutputStream daos = new DataOutputStream(baos);
+				NBTBase.writeNamedTag(dataWatcherNBT, daos);
+				byte[] data = baos.toByteArray();
+				DataInputStream dis = new DataInputStream(new BufferedInputStream(new GZIPInputStream(new ByteArrayInputStream(data))));
+				List list = DataWatcher.readWatchableObjects(dis);
+				this.mob.getDataWatcher().updateWatchedObjectsFromList(list);
+				dis.close();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}*/
 		}
 		else
 		{
@@ -198,14 +221,38 @@ public class TileEntityMobShowcase extends TileEntity implements IInventory
     	par1NBTTagCompound.setBoolean("isDisplay", this.isRotate);
     	par1NBTTagCompound.setFloat("Delay", this.delay);
 		
-		NBTTagCompound nbttagcompound2 = new NBTTagCompound();
+		NBTTagCompound entityNBT = new NBTTagCompound();
+		NBTTagCompound dataWatcherNBT = new NBTTagCompound();
 		
 		if (this.mob != null)
 		{
-			this.mob.writeToNBT(nbttagcompound2);
+			this.mob.writeToNBT(entityNBT);
+			entityNBT.setString("id", EntityList.getEntityString(this.mob));
+			
+			
+			/*try
+			{
+				// DataWatcher‚©‚çwrite
+				// NBT‚Éread
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				DataOutputStream dos = new DataOutputStream(baos);
+				this.mob.getDataWatcher().writeWatchableObjects(dos);
+				byte[] data = baos.toByteArray();
+				dataWatcherNBT = (NBTTagCompound)NBTBase.readNamedTag(new DataInputStream(new ByteArrayInputStream(data)));
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			catch (ClassCastException e)
+			{
+				e.printStackTrace();
+				dataWatcherNBT = preNBT;
+			}*/
 		}
 		
-		par1NBTTagCompound.setCompoundTag("Mob", nbttagcompound2);
+		par1NBTTagCompound.setCompoundTag("Mob", entityNBT);
+		par1NBTTagCompound.setCompoundTag("DataWatcher", dataWatcherNBT);
 	}
 	
 	@Override
