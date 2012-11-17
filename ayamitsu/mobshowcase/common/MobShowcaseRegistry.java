@@ -32,30 +32,6 @@ public final class MobShowcaseRegistry
 		return returnerMap.containsKey(Integer.valueOf(is.itemID));
 	}
 	
-	/*public static IMobReturner getMobReturner(ItemStack is)
-	{
-		Collection<IMobReturner> collection = returnerMap.get(Integer.valueOf(is));
-		
-		if (collection == null || collection.isEmpty())
-		{
-			return null;
-		}
-		else
-		{
-			for (Iterator iterator = collection.iterator(); iterator.hasNext();)
-			{
-				IMobReturner returner = iterator.next();
-				
-				if (returner.getEntity(is) != null)
-				{
-					return returner;
-				}
-			}
-			
-			return null;
-		}
-	}*/
-	
 	public static Entity getEntity(ItemStack is, World world)
 	{
 		init();

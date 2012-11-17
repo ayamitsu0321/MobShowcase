@@ -5,13 +5,18 @@ import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.network.IPacketHandler;
 
 import java.io.IOException;
+import java.io.DataOutputStream;
+import java.io.ByteArrayOutputStream;
+
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteStreams;
 
 public class PacketHandler implements IPacketHandler
 {
 	@Override
 	public void onPacketData(INetworkManager network, Packet250CustomPayload packet250, Player player)
 	{
-		System.out.println("onPacketData@" + packet250.getClass().toString() + "," + String.valueOf(player));
+		//System.out.println("onPacketData@" + packet250.getClass().toString() + "," + String.valueOf(player));
 		
 		if (packet250.channel.equals("mobshowcase") && player instanceof EntityPlayer)
 		{
@@ -36,14 +41,5 @@ public class PacketHandler implements IPacketHandler
 				e.printStackTrace();
 			}
 		}
-		
-		/*if (packet250 instanceof PacketMobShowcase && player instanceof EntityPlayer)
-		{
-			System.out.println("Packet:" + packet250.channel);
-			PacketMobShowcase packet = (PacketMobShowcase)packet250;
-			World world = ((EntityPlayer)player).worldObj;
-			TileEntity tile = world.getBlockTileEntity(packet.xPosition, packet.yPosition, packet.zPosition);
-			tile.readFromNBT(packet.customData);
-		}*/
 	}
 }

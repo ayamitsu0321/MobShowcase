@@ -102,5 +102,7 @@ public class MobShowcase
 		
 		this.proxy.load();
 		MobShowcaseRegistry.addReturner(Item.monsterPlacer.shiftedIndex, new MobReturnerSpawnEgg());
+		MobShowcaseRegistry.addReturner(Item.egg.shiftedIndex, new MobReturnerEgg());
+		MobShowcaseRegistry.addReturner(Block.dragonEgg.blockID, new MobReturnerEgg());
 	}
 }

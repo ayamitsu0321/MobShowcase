@@ -7,9 +7,12 @@ import net.minecraft.src.*;
 import net.minecraft.client.Minecraft;
 
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import java.io.IOException;
 
 public class GuiMobShowcase extends GuiContainer
 {
@@ -26,33 +29,15 @@ public class GuiMobShowcase extends GuiContainer
 	{
 		super.initGui();
 		this.controlList.clear();
-		int defID = 10;
-		this.controlList.add(new GuiButtonShowcase(defID + 1, this.width / 2 - 8, this.height / 2 - 76, ">"));
-		this.controlList.add(new GuiButtonShowcase(defID + 2, this.width / 2 - 8, this.height / 2 - 63, "*"));
-		this.controlList.add(new GuiButtonShowcase(defID + 3, this.width / 2 + 30, this.height / 2 - 48, "○"));
-		this.controlList.add(new GuiSliderHorizon(defID + 4, this.width / 2 + 9, this.height / 2 - 64, "Scale", this.showcase.getMobScale() / 2.0F));
-		this.controlList.add(new GuiSliderVertical(defID + 5, this.width / 2 - 83, this.height / 2 - 76, "Y", this.showcase.getMobTranslate()));
-		/*this.controlList.add();
-		this.controlList.add();
-		this.controlList.add();
-		this.controlList.add();
-		this.controlList.add();
-		this.controlList.add();
-		this.controlList.add();
-		this.controlList.add();
-		this.controlList.add();
-		this.controlList.add();
-		this.controlList.add();
-		this.controlList.add();*/
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		this.controlList.add(new GuiButtonShowcase(0, this.width / 2 - 8, this.height / 2 - 76, ">"));
+		this.controlList.add(new GuiButtonShowcase(1, this.width / 2 - 8, this.height / 2 - 63, "*"));
+		this.controlList.add(new GuiButtonShowcase(2, this.width / 2 + 30, this.height / 2 - 48, "○"));
+		this.controlList.add(new GuiSliderHorizon(3, this.width / 2 + 9, this.height / 2 - 64, "Scale", this.showcase.getMobScale() / 2.0F));
+		this.controlList.add(new GuiSliderVertical(4, this.width / 2 - 83, this.height / 2 - 76, "Y", this.showcase.getMobTranslate()));
+		this.controlList.add(new GuiSliderColor(5, this.width / 2 - 10, this.height / 2 - 36, "R", this.showcase.getMobColorRGB(0)));
+		this.controlList.add(new GuiSliderColor(6, this.width / 2 + 4, this.height / 2 - 36, "G", this.showcase.getMobColorRGB(1)));
+		this.controlList.add(new GuiSliderColor(7, this.width / 2 + 17, this.height / 2 - 36, "B", this.showcase.getMobColorRGB(2)));
+		this.controlList.add(new GuiSliderColor(8, this.width / 2 + 30, this.height / 2 - 36, "○", this.showcase.getDelay()));
 	}
 	
 	@Override
@@ -61,7 +46,6 @@ public class GuiMobShowcase extends GuiContainer
         this.fontRenderer.drawString(StatCollector.translateToLocal("Showcase"), 106, 6, 0x404040);
     }
 	
-	/** abstract */
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
@@ -112,6 +96,7 @@ public class GuiMobShowcase extends GuiContainer
 	{
 		super.mouseMovedOrUp(par1, par2, par3);
 		
+		// GuiContainerがオーバーライドしてこの処理がきえてたのよ!!
 		try
 		{
 			GuiButton selectedButton = (GuiButton)ObfuscationReflectionHelper.getPrivateValue(GuiScreen.class, this, 8);
@@ -142,20 +127,31 @@ public class GuiMobShowcase extends GuiContainer
             return;
         }
 		
-		int defID = 10;
 		
-		if (guibutton.id == (defID + 1))
+		if (guibutton.id == 0)
 		{
 			this.showcase.setMobRotationX(this.showcase.getMobRotationX() + 45F);
 		}
-		else if (guibutton.id == (defID + 2))
+		else if (guibutton.id == 1)
 		{
 			int i = this.showcase.getMobMagnification();// 1 <= i <= 3
 			this.showcase.setMobMagnification((i < 4 && i >= 1 ? i + 1 : 1));
 		}
-		else if (guibutton.id == (defID + 3))
+		else if (guibutton.id == 2)
 		{
 			this.showcase.setDoRotation(!this.showcase.isDoRotation());
+		}
+		
+		try
+		{
+			NBTTagCompound nbttagcompound = new NBTTagCompound();
+			this.showcase.writeToNBT(nbttagcompound);
+			byte[] data = CompressedStreamTools.compress(nbttagcompound);
+			PacketDispatcher.sendPacketToServer(new Packet250CustomPayload("mobshowcase", data));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
 		}
 	}
 	
@@ -163,5 +159,38 @@ public class GuiMobShowcase extends GuiContainer
 	public void updateScreen()
 	{
 		super.updateScreen();
+		
+		this.showcase.setMobScale(((GuiSliderHorizon)this.controlList.get(3)).getSliderValue() * 2.0F);
+		this.showcase.setMobTranslate(((GuiSliderVertical)this.controlList.get(4)).getSliderValue());
+		
+		this.showcase.setMobColorRGB(((GuiSliderColor)this.controlList.get(5)).getSliderValue(), 0);
+		this.showcase.setMobColorRGB(((GuiSliderColor)this.controlList.get(6)).getSliderValue(), 1);
+		this.showcase.setMobColorRGB(((GuiSliderColor)this.controlList.get(7)).getSliderValue(), 2);
+		this.showcase.setDelay(((GuiSliderColor)this.controlList.get(8)).getSliderValue());
+		this.showcase.yaw = this.showcase.getDelay() > 0.0F ? this.showcase.yaw : 0.0D;
+		
+		if (this.showcase.getMobRotationX() >= 360F && !this.showcase.isDoRotation())
+		{
+			this.showcase.setMobRotationX(0F);
+		}
+	}
+	
+	/**
+	 * 閉じたときに一括してPacket送信
+	 */
+	@Override
+	public void onGuiClosed()
+	{
+		try
+		{
+			NBTTagCompound nbttagcompound = new NBTTagCompound();
+			this.showcase.writeToNBT(nbttagcompound);
+			byte[] data = CompressedStreamTools.compress(nbttagcompound);
+			PacketDispatcher.sendPacketToServer(new Packet250CustomPayload("mobshowcase", data));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

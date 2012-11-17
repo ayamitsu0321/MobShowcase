@@ -2,16 +2,21 @@ package ayamitsu.mobshowcase.client;
 
 import net.minecraft.src.*;
 import net.minecraft.client.Minecraft;
+
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
+
 import org.lwjgl.opengl.GL11;
 
-public class GuiSliderVertical extends GuiButton
+@SideOnly(Side.CLIENT)
+public class GuiSliderColor extends GuiButton
 {
 	private float sliderValue;
 	public boolean dragging;
 	
-	public GuiSliderVertical(int i, int x, int y, String display, float f)
+	public GuiSliderColor(int i, int x, int y, String display, float f)
 	{
-		super(i, x, y, 12, 72, display);
+		super(i, x, y, 12, 32, display);
 		this.sliderValue = f;
 		this.dragging = false;
 	}
@@ -47,7 +52,7 @@ public class GuiSliderVertical extends GuiButton
 			j = 0xffffa0;
 		}
 		
-		this.drawCenteredString(fontrenderer, this.displayString, this.xPosition + this.width / 2, this.yPosition + (this.height - 8) / 2, j);
+		this.drawCenteredString(fontrenderer, this.displayString, this.xPosition + this.width / 2, this.yPosition + (this.height - 4) / 2, j);
 	}
 	
 	@Override
@@ -60,7 +65,7 @@ public class GuiSliderVertical extends GuiButton
 		
 		if (this.dragging)
 		{
-			this.sliderValue = (float)(par3 - (this.yPosition + 6)) / (float)(this.height - 12);
+			this.sliderValue = (float)(par3 - (this.yPosition + 3)) / (float)(this.height - 6);
 			
 			if (this.sliderValue < 0.0F)
 			{
@@ -74,7 +79,7 @@ public class GuiSliderVertical extends GuiButton
 		}
 		
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.drawTexturedModalRect(this.xPosition, this.yPosition  + (int)(this.sliderValue * (float)(this.height - 12)), 188, 0, 12, 12);
+		this.drawTexturedModalRect(this.xPosition, this.yPosition  + (int)(this.sliderValue * (float)(this.height - 6)), 188, 34, 12, 6);
 	}
 	
 	@Override
@@ -82,7 +87,7 @@ public class GuiSliderVertical extends GuiButton
 	{
 		if (super.mousePressed(mc, par2, par3))
 		{
-			this.sliderValue = (float)(par3 - (this.yPosition + 6)) / (float)(this.height - 12);
+			this.sliderValue = (float)(par3 - (this.yPosition + 3)) / (float)(this.height - 6);
 
 			if (this.sliderValue < 0.0F)
 			{

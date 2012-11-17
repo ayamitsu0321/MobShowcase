@@ -40,7 +40,6 @@ public class GuiSliderHorizon extends GuiButton
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		boolean flag = par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width && par3 < this.yPosition + this.height;
 		int i = this.getHoverState(flag);
-		//this.drawTexturedModalRect(this.xPosition, this.yPosition, 176 + i * 12, 24, this.width, this.height);
 		this.mouseDragged(mc, par2, par3);
 		int j = 0xe0e0e0;
 		
@@ -112,7 +111,6 @@ public class GuiSliderHorizon extends GuiButton
 	@Override
 	public void mouseReleased(int par1, int par2)
 	{
-		System.out.println("released");
 		this.dragging = false;
 	}
 	

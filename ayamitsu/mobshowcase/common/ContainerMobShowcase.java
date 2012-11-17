@@ -1,14 +1,10 @@
 package ayamitsu.mobshowcase.common;
 
 import net.minecraft.src.*;
-import cpw.mods.fml.common.network.PacketDispatcher;
-
-import java.io.IOException;
 
 public class ContainerMobShowcase extends Container
 {
 	public TileEntityMobShowcase showcase;
-	private boolean slotChanged = false;
 	
 	public ContainerMobShowcase(EntityPlayer player, World world, int blockX, int blockY, int blockZ)
 	{
@@ -98,27 +94,13 @@ public class ContainerMobShowcase extends Container
 	public void onCraftGuiClosed(EntityPlayer player)
 	{
 		super.onCraftGuiClosed(player);
+		// äÑÇ∆èdóv
 		SlotMobShowcase.hasInit = 0;
-		System.out.println("on close");
-		
-		if (this.showcase.getWorldObj().isRemote)
-		{
-			System.out.println("on close remote");
-			
-			try
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				this.showcase.writeToNBT(nbttagcompound);
-				byte[] data = CompressedStreamTools.compress(nbttagcompound);
-				PacketDispatcher.sendPacketToServer(new Packet250CustomPayload("mobshowcase", data));
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-			
-			//PacketDispatcher.sendPacketToServer(new PacketMobShowcase("Slot", this.showcase.xCoord, this.showcase.yCoord, this.showcase.zCoord, nbttagcompound));
-			//PacketDispatcher.sendPacketToServer(this.showcase.getDescriptionPacket());
-		}
+	}
+	
+	@Override
+	public void updateCraftingResults()
+	{
+		super.updateCraftingResults();
 	}
 }

@@ -23,35 +23,21 @@ public class SlotMobShowcase extends Slot
 	public void onSlotChanged()
 	{
 		super.onSlotChanged();
-		System.out.println("onSlotChanged");
 		
 		if (hasInit < 2)
 		{
 			++hasInit;
-			System.out.println("++hasInit:" + hasInit);
 			return;
 		}
 		
-		System.out.println("through");
 		Entity entity = null;
 		
 		if (this.getHasStack())
 		{
-			System.out.println("new Entity");
 			entity = MobShowcaseRegistry.getEntity(this.getStack(), this.showcase.getWorldObj());
 		}
 		
+		// ‚±‚±‚ÌŽž“_‚ÅEntity‚ðset‚µ‚Ä‚µ‚Ü‚¤
 		this.showcase.setEntity(entity);
-		
-		/*if (this.showcase.getWorldObj().isRemote)
-		{
-			System.out.println("send_Packet");
-			// Client‚©‚çServer‚Ö‚Æ“¯Šú‚³‚¹‚é‚½‚ß
-			NBTTagCompound nbttagcompound = new NBTTagCompound();
-			this.showcase.writeToNBT(nbttagcompound);
-
-			PacketDispatcher.sendPacketToServer(new PacketMobShowcase("Slot", this.showcase.xCoord, this.showcase.yCoord, this.showcase.zCoord, nbttagcompound));
-			//PacketDispatcher.sendPacketToServer(this.showcase.getDescriptionPacket());
-		}*/
 	}
 }

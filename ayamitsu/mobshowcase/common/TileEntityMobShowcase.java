@@ -138,6 +138,11 @@ public class TileEntityMobShowcase extends TileEntity implements IInventory
 		this.magnification = par1NBTTagCompound.getInteger("EntityMagnification");
 		this.translate = par1NBTTagCompound.getFloat("EntityTranslate");
 		this.rotateX = par1NBTTagCompound.getFloat("EntityRotationX");
+		this.color[0] = par1NBTTagCompound.getFloat("EntityColorR");//R
+		this.color[1] = par1NBTTagCompound.getFloat("EntityColorG");//G
+		this.color[2] = par1NBTTagCompound.getFloat("EntityColorB");//B
+		this.isRotate = par1NBTTagCompound.getBoolean("isDisplay");//display
+		this.delay = par1NBTTagCompound.getFloat("Delay");//delay
 		NBTTagList nbttaglist2 = par1NBTTagCompound.getTagList("Color");
 		
 		try
@@ -164,24 +169,6 @@ public class TileEntityMobShowcase extends TileEntity implements IInventory
 		if (entityNBT != null)
 		{
 			this.mob = EntityList.createEntityFromNBT(entityNBT, this.worldObj);
-			
-			/*try
-			{
-				// NBT‚©‚çwrite
-				// DataWatcher‚Éread‚³‚¹‚é
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				DataOutputStream daos = new DataOutputStream(baos);
-				NBTBase.writeNamedTag(dataWatcherNBT, daos);
-				byte[] data = baos.toByteArray();
-				DataInputStream dis = new DataInputStream(new BufferedInputStream(new GZIPInputStream(new ByteArrayInputStream(data))));
-				List list = DataWatcher.readWatchableObjects(dis);
-				this.mob.getDataWatcher().updateWatchedObjectsFromList(list);
-				dis.close();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}*/
 		}
 		else
 		{
@@ -211,6 +198,13 @@ public class TileEntityMobShowcase extends TileEntity implements IInventory
     	par1NBTTagCompound.setInteger("EntityMagnification", this.magnification);
     	par1NBTTagCompound.setFloat("EntityTranslate", this.translate);
     	par1NBTTagCompound.setFloat("EntityRotationX", this.rotateX);
+		
+		par1NBTTagCompound.setFloat("EntityColorR", this.color[0]);//R
+		par1NBTTagCompound.setFloat("EntityColorG", this.color[1]);//G
+		par1NBTTagCompound.setFloat("EntityColorB", this.color[2]);//B
+		par1NBTTagCompound.setBoolean("isDisplay", this.isRotate);
+		par1NBTTagCompound.setFloat("Delay", this.delay);
+		
 		NBTTagList nbttaglist2 = new NBTTagList();
 		
 		for (int j = 0; j < this.color.length; j++)
@@ -228,27 +222,6 @@ public class TileEntityMobShowcase extends TileEntity implements IInventory
 		{
 			this.mob.writeToNBT(entityNBT);
 			entityNBT.setString("id", EntityList.getEntityString(this.mob));
-			
-			
-			/*try
-			{
-				// DataWatcher‚©‚çwrite
-				// NBT‚Éread
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				DataOutputStream dos = new DataOutputStream(baos);
-				this.mob.getDataWatcher().writeWatchableObjects(dos);
-				byte[] data = baos.toByteArray();
-				dataWatcherNBT = (NBTTagCompound)NBTBase.readNamedTag(new DataInputStream(new ByteArrayInputStream(data)));
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-			catch (ClassCastException e)
-			{
-				e.printStackTrace();
-				dataWatcherNBT = preNBT;
-			}*/
 		}
 		
 		par1NBTTagCompound.setCompoundTag("Mob", entityNBT);
@@ -258,11 +231,6 @@ public class TileEntityMobShowcase extends TileEntity implements IInventory
 	@Override
 	public void updateEntity()
 	{
-		if (this.worldObj.isRemote)
-		{
-			return;
-		}
-		
 		this.yaw2 = this.yaw;
 		
 		if (this.delay > 0.0F)

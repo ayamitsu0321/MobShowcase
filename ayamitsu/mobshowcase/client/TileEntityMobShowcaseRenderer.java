@@ -55,12 +55,6 @@ public class TileEntityMobShowcaseRenderer extends TileEntitySpecialRenderer
     	RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		
-		
-		
-		
-		
-		
 	}
 	
 	public void renderTileEntityAt(TileEntity par1TileEntity, double par2, double par4, double par6, float par8)
