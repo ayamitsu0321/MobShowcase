@@ -1,9 +1,9 @@
 package ayamitsu.mobshowcase.common;
 
-import net.minecraft.src.*;
-
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonProxy implements IGuiHandler
 {
@@ -11,12 +11,12 @@ public class CommonProxy implements IGuiHandler
 	{
 		GameRegistry.registerTileEntity(TileEntityMobShowcase.class, "MobShowcase");
 	}
-	
+
 	public int getUniqueRenderId()
 	{
 		return -1;
 	}
-	
+
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z)
 	{

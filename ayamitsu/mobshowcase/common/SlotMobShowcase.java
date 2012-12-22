@@ -1,43 +1,46 @@
 package ayamitsu.mobshowcase.common;
 
-import net.minecraft.src.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 public class SlotMobShowcase extends Slot
 {
 	public TileEntityMobShowcase showcase;
 	public static int hasInit = 0;
-	
+
 	public SlotMobShowcase(TileEntityMobShowcase par1TileEntityMobShowcase, int par2, int par3, int par4)
 	{
 		super((IInventory)par1TileEntityMobShowcase, par2, par3, par4);
 		this.showcase = par1TileEntityMobShowcase;
 	}
-	
+
 	@Override
 	public boolean isItemValid(ItemStack is)
 	{
 		return MobShowcaseRegistry.contains(is);
 	}
-	
+
 	@Override
 	public void onSlotChanged()
 	{
 		super.onSlotChanged();
-		
+
 		if (hasInit < 2)
 		{
 			++hasInit;
 			return;
 		}
-		
+
 		Entity entity = null;
-		
+
 		if (this.getHasStack())
 		{
 			entity = MobShowcaseRegistry.getEntity(this.getStack(), this.showcase.getWorldObj());
 		}
-		
-		// ‚±‚±‚ÌŽž“_‚ÅEntity‚ðset‚µ‚Ä‚µ‚Ü‚¤
+
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ÌŽï¿½ï¿½_ï¿½ï¿½Entityï¿½ï¿½setï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½
 		this.showcase.setEntity(entity);
 	}
 }

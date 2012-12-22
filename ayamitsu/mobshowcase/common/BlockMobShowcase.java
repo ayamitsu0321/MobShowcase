@@ -1,41 +1,47 @@
 package ayamitsu.mobshowcase.common;
 
-import ayamitsu.mobshowcase.MobShowcase;
-
-import net.minecraft.src.*;
-
 import java.util.Random;
+
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import ayamitsu.mobshowcase.MobShowcase;
 
 public class BlockMobShowcase extends BlockContainer
 {
 	private int renderType;
 	public Random random;
-	
+
 	public BlockMobShowcase(int id, int tex, Material material, int render)
 	{
 		super(id, tex, material);
 		this.renderType = render;
 		this.random = new Random();
 	}
-	
+
 	@Override
 	public TileEntity createNewTileEntity(World world)
 	{
 		return new TileEntityMobShowcase();
 	}
-	
+
 	@Override
     public void breakBlock(World world, int blockX, int blockY, int blockZ, int side, int par6)
 	{
 		TileEntity tileentity = world.getBlockTileEntity(blockX, blockY, blockZ);
-		
+
 		if (tileentity instanceof TileEntityMobShowcase)
 		{
 			TileEntityMobShowcase showcase = (TileEntityMobShowcase)tileentity;
-			
+
 			for (int i = 0; i < showcase.getSizeInventory(); i++)
             {
-                ItemStack is = showcase.getStackInSlot(i);
+				ItemStack is = showcase.getStackInSlot(i);
 
                 if (is != null)
                 {
@@ -61,28 +67,28 @@ public class BlockMobShowcase extends BlockContainer
 
                         if (is.hasTagCompound())
                         {
-                            entityitem.item.setTagCompound((NBTTagCompound)is.getTagCompound().copy());
+                            entityitem.func_92014_d().setTagCompound((NBTTagCompound)is.getTagCompound().copy());
                         }
                     }
                 }
             }
 		}
-		
+
 		super.breakBlock(world, blockX, blockY, blockZ, side, par6);
 	}
-	
+
 	@Override
 	public boolean renderAsNormalBlock()
 	{
 		return false;
 	}
-	
+
 	@Override
 	public int getRenderType()
 	{
 		return renderType;
 	}
-	
+
 	@Override
 	public void setBlockBoundsForItemRender()
     {
@@ -95,24 +101,24 @@ public class BlockMobShowcase extends BlockContainer
     		super.setBlockBoundsForItemRender();
     	}
     }
-	
+
 	@Override
 	public boolean isOpaqueCube()
     {
         return false;
     }
-	
+
 	@Override
 	protected boolean canSilkHarvest()
     {
         return true;
     }
-	
+
 	@Override
 	public boolean onBlockActivated(World world, int blockX, int blockY, int blockZ, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
 	{
 		TileEntity tileentity = world.getBlockTileEntity(blockX, blockY, blockZ);
-		
+
 		if (world.isRemote)
 		{
 			return true;
@@ -123,7 +129,7 @@ public class BlockMobShowcase extends BlockContainer
 			//System.out.println("activated");
 			player.openGui(MobShowcase.instance, 0, world, blockX, blockY, blockZ);
 		}
-		
+
 		return true;
 	}
 

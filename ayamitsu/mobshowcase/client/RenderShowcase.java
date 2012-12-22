@@ -1,25 +1,28 @@
 package ayamitsu.mobshowcase.client;
 
-import net.minecraft.src.*;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.world.IBlockAccess;
+
+import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 public class RenderShowcase implements ISimpleBlockRenderingHandler
 {
 	int renderId;
-	
+
 	public RenderShowcase(int id)
 	{
 		this.renderId = id;
 	}
-	
+
 	@Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderblocks)
 	{
 		Tessellator tessellator = Tessellator.instance;
-		
+
 		if (modelId == this.renderId)
 		{
 			block.setBlockBoundsForItemRender();
@@ -52,7 +55,7 @@ public class RenderShowcase implements ISimpleBlockRenderingHandler
             GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		}
 	}
-	
+
 	@Override
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderblocks)
 	{
@@ -63,10 +66,10 @@ public class RenderShowcase implements ISimpleBlockRenderingHandler
 			block.setBlockBoundsForItemRender();
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
     public boolean shouldRender3DInInventory()
 	{
