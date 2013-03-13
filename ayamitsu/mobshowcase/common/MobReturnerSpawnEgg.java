@@ -17,7 +17,7 @@ public class MobReturnerSpawnEgg implements IMobReturner
 
 	public Entity getEntity(ItemStack is, World world)
 	{
-		if (is.itemID != Item.monsterPlacer.shiftedIndex)
+		if (is.itemID != Item.monsterPlacer.itemID)
 		{
 			return null;
 		}

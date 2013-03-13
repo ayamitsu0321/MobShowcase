@@ -78,12 +78,12 @@ public class MobShowcase
 	public void init(FMLInitializationEvent event)
 	{
 		this.renderId = proxy.getUniqueRenderId();
-		this.showcase_stone = new BlockMobShowcase(this.showcase_stoneId, Block.stone.blockIndexInTexture, Material.rock, renderId);
-		this.showcase_stone.setHardness(1.0F).setBlockName("Showcase Stone").setCreativeTab(CreativeTabs.tabDecorations);
-		this.showcase_glass = new BlockMobShowcase(this.showcase_glassId, Block.glass.blockIndexInTexture, Material.glass, 0);
-		this.showcase_glass.setHardness(0.3F).setStepSound(Block.soundGlassFootstep).setBlockName("Showcase Glass").setCreativeTab(CreativeTabs.tabDecorations);
-		GameRegistry.registerBlock(this.showcase_stone);
-		GameRegistry.registerBlock(this.showcase_glass);
+		this.showcase_stone = new BlockMobShowcase(this.showcase_stoneId, Material.rock, renderId);
+		this.showcase_stone.setHardness(1.0F).setUnlocalizedName("mobShowcase.stone").setCreativeTab(CreativeTabs.tabDecorations);
+		this.showcase_glass = new BlockMobShowcase(this.showcase_glassId, Material.glass, 0);
+		this.showcase_glass.setHardness(0.3F).setStepSound(Block.soundGlassFootstep).setUnlocalizedName("mobShowcase.glass").setCreativeTab(CreativeTabs.tabDecorations);
+		GameRegistry.registerBlock(this.showcase_stone, "mobShowcase.stone");
+		GameRegistry.registerBlock(this.showcase_glass,  "mobShowcase.glass");
 		LanguageRegistry.instance().addNameForObject(this.showcase_stone, "en_US", "Showcase Stone");
 		LanguageRegistry.instance().addNameForObject(this.showcase_glass, "en_US", "Showcase Glass");
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
@@ -107,8 +107,8 @@ public class MobShowcase
 		);
 
 		this.proxy.load();
-		MobShowcaseRegistry.addReturner(Item.monsterPlacer.shiftedIndex, new MobReturnerSpawnEgg());
-		MobShowcaseRegistry.addReturner(Item.egg.shiftedIndex, new MobReturnerEgg());
+		MobShowcaseRegistry.addReturner(Item.monsterPlacer.itemID, new MobReturnerSpawnEgg());
+		MobShowcaseRegistry.addReturner(Item.egg.itemID, new MobReturnerEgg());
 		MobShowcaseRegistry.addReturner(Block.dragonEgg.blockID, new MobReturnerEgg());
 	}
 }

@@ -2,6 +2,7 @@ package ayamitsu.mobshowcase.common;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
@@ -9,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import ayamitsu.mobshowcase.MobShowcase;
 
@@ -17,11 +19,12 @@ public class BlockMobShowcase extends BlockContainer
 	private int renderType;
 	public Random random;
 
-	public BlockMobShowcase(int id, int tex, Material material, int render)
+	public BlockMobShowcase(int id, Material material, int render)
 	{
-		super(id, tex, material);
+		super(id, material);
 		this.renderType = render;
 		this.random = new Random();
+		this.setBlockBoundsForItemRender();
 	}
 
 	@Override
@@ -67,7 +70,7 @@ public class BlockMobShowcase extends BlockContainer
 
                         if (is.hasTagCompound())
                         {
-                            entityitem.func_92014_d().setTagCompound((NBTTagCompound)is.getTagCompound().copy());
+                        	entityitem.getEntityItem().setTagCompound((NBTTagCompound)is.getTagCompound().copy());
                         }
                     }
                 }
@@ -126,11 +129,16 @@ public class BlockMobShowcase extends BlockContainer
 		else if (tileentity instanceof TileEntityMobShowcase)
 		{
 			// open gui
-			//System.out.println("activated");
 			player.openGui(MobShowcase.instance, 0, world, blockX, blockY, blockZ);
 		}
 
 		return true;
+	}
+
+	@Override
+	public Icon getBlockTextureFromSideAndMetadata(int par1, int par2)
+	{
+		return this.renderType == 0 ? Block.glass.getBlockTextureFromSideAndMetadata(par1, par2) : Block.stone.getBlockTextureFromSideAndMetadata(par1, par2);
 	}
 
 }

@@ -100,9 +100,9 @@ public class ContainerMobShowcase extends net.minecraft.inventory.Container
 		SlotMobShowcase.hasInit = 0;
 	}
 
-	@Override
+	/*@Override
 	public void updateCraftingResults()
 	{
 		super.updateCraftingResults();
-	}
+	}*/
 }

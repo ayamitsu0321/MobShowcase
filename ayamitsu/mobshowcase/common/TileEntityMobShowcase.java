@@ -17,17 +17,19 @@ import net.minecraft.util.ReportedException;
 public class TileEntityMobShowcase extends TileEntity implements IInventory
 {
 	private ItemStack[] item = new ItemStack[1];
-	private float scale = 1.0F;// �傫��
-	private float rotateX = 0.0F;// X���̉�]
-	private int magnification = 1;// �{��
-	private float translate = 0.5F;// �ʒu
-	protected Entity mob;// mob
-	private float[] color = new float[] { 1.0F, 1.0F, 1.0F };// �F, RGB
-	private boolean isRotate = false;// ��]���邩�ۂ�
-	public double yaw = 0.0D;// ��]
-	public double yaw2 = 0.0D;// ��]2
-	private float delay = 0.0F;// ���
-	private float field_a;// �`������肳���邽��
+	private float scale = 1.0F;
+	private float rotateX = 0.0F;
+	private int magnification = 1;
+	private float translate = 0.5F;
+	protected Entity mob;
+	private float[] color = new float[] { 1.0F, 1.0F, 1.0F };
+	private boolean isRotate = false;
+	public double yaw = 0.0D;
+	public double yaw2 = 0.0D;
+	private float delay = 0.0F;
+	private float field_a;
+
+	protected NBTTagCompound firstLoadedEntityNBT = null;
 
 	public TileEntityMobShowcase()
 	{
@@ -176,7 +178,14 @@ public class TileEntityMobShowcase extends TileEntity implements IInventory
 
 		if (entityNBT != null)
 		{
-			this.mob = EntityList.createEntityFromNBT(entityNBT, this.worldObj);
+			if (this.worldObj != null)
+			{
+				this.mob = EntityList.createEntityFromNBT(entityNBT, this.worldObj);
+			}
+			else
+			{
+				this.firstLoadedEntityNBT = entityNBT;
+			}
 		}
 		else
 		{
@@ -239,6 +248,12 @@ public class TileEntityMobShowcase extends TileEntity implements IInventory
 	@Override
 	public void updateEntity()
 	{
+		if (this.worldObj != null && this.firstLoadedEntityNBT != null)
+		{
+			this.mob = EntityList.createEntityFromNBT(this.firstLoadedEntityNBT, this.worldObj);
+			this.firstLoadedEntityNBT = null;
+		}
+
 		this.yaw2 = this.yaw;
 
 		if (this.delay > 0.0F)
@@ -349,11 +364,19 @@ public class TileEntityMobShowcase extends TileEntity implements IInventory
         return par1EntityPlayer.getDistanceSq((double)xCoord + 0.5D, (double)yCoord + 0.5D, (double)zCoord + 0.5D) <= 64D;
     }
 //
-	public void openChest()
-    {
-    }
+	public void openChest() {}
 
-    public void closeChest()
-    {
-    }
+    public void closeChest() {}
+
+	@Override
+	public boolean func_94042_c()// hasCustomName
+	{
+		return false;
+	}
+
+	@Override
+	public boolean func_94041_b(int slotIndex, ItemStack itemstack)// canPutItemInSlot
+	{
+		return slotIndex == 0 && itemstack != null && MobShowcaseRegistry.contains(itemstack);
+	}
 }

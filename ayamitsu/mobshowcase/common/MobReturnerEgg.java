@@ -21,7 +21,7 @@ public class MobReturnerEgg implements IMobReturner
 	{
 		EntityLiving entity = null;
 
-		if (is.itemID == Item.egg.shiftedIndex)
+		if (is.itemID == Item.egg.itemID)
 		{
 			entity = new EntityChicken(world);
 			entity.initCreature();

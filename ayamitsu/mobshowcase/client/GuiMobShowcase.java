@@ -40,16 +40,16 @@ public class GuiMobShowcase extends GuiContainer
 	public void initGui()
 	{
 		super.initGui();
-		this.controlList.clear();
-		this.controlList.add(new GuiButtonShowcase(0, this.width / 2 - 8, this.height / 2 - 76, ">"));
-		this.controlList.add(new GuiButtonShowcase(1, this.width / 2 - 8, this.height / 2 - 63, "*"));
-		this.controlList.add(new GuiButtonShowcase(2, this.width / 2 + 30, this.height / 2 - 48, "○"));
-		this.controlList.add(new GuiSliderHorizon(3, this.width / 2 + 9, this.height / 2 - 64, "Scale", this.showcase.getMobScale() / 2.0F));
-		this.controlList.add(new GuiSliderVertical(4, this.width / 2 - 83, this.height / 2 - 76, "Y", this.showcase.getMobTranslate()));
-		this.controlList.add(new GuiSliderColor(5, this.width / 2 - 10, this.height / 2 - 36, "R", this.showcase.getMobColorRGB(0)));
-		this.controlList.add(new GuiSliderColor(6, this.width / 2 + 4, this.height / 2 - 36, "G", this.showcase.getMobColorRGB(1)));
-		this.controlList.add(new GuiSliderColor(7, this.width / 2 + 17, this.height / 2 - 36, "B", this.showcase.getMobColorRGB(2)));
-		this.controlList.add(new GuiSliderColor(8, this.width / 2 + 30, this.height / 2 - 36, "○", this.showcase.getDelay()));
+		this.buttonList.clear();
+		this.buttonList.add(new GuiButtonShowcase(0, this.width / 2 - 8, this.height / 2 - 76, ">"));
+		this.buttonList.add(new GuiButtonShowcase(1, this.width / 2 - 8, this.height / 2 - 63, "*"));
+		this.buttonList.add(new GuiButtonShowcase(2, this.width / 2 + 30, this.height / 2 - 48, "○"));
+		this.buttonList.add(new GuiSliderHorizon(3, this.width / 2 + 9, this.height / 2 - 64, "Scale", this.showcase.getMobScale() / 2.0F));
+		this.buttonList.add(new GuiSliderVertical(4, this.width / 2 - 83, this.height / 2 - 76, "Y", this.showcase.getMobTranslate()));
+		this.buttonList.add(new GuiSliderColor(5, this.width / 2 - 10, this.height / 2 - 36, "R", this.showcase.getMobColorRGB(0)));
+		this.buttonList.add(new GuiSliderColor(6, this.width / 2 + 4, this.height / 2 - 36, "G", this.showcase.getMobColorRGB(1)));
+		this.buttonList.add(new GuiSliderColor(7, this.width / 2 + 17, this.height / 2 - 36, "B", this.showcase.getMobColorRGB(2)));
+		this.buttonList.add(new GuiSliderColor(8, this.width / 2 + 30, this.height / 2 - 36, "○", this.showcase.getDelay()));
 	}
 
 	@Override
@@ -61,7 +61,8 @@ public class GuiMobShowcase extends GuiContainer
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
-		this.mc.renderEngine.bindTexture(mc.renderEngine.getTexture("/ayamitsu/mobshowcase/gui.png"));
+		//this.mc.renderEngine.bindTexture(mc.renderEngine.getTexture("/ayamitsu/mobshowcase/gui.png"));
+		this.mc.renderEngine.func_98187_b("/ayamitsu/mobshowcase/gui.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int j = (width - xSize) / 2;
         int k = (height - ySize) / 2;
@@ -172,13 +173,13 @@ public class GuiMobShowcase extends GuiContainer
 	{
 		super.updateScreen();
 
-		this.showcase.setMobScale(((GuiSliderHorizon)this.controlList.get(3)).getSliderValue() * 2.0F);
-		this.showcase.setMobTranslate(((GuiSliderVertical)this.controlList.get(4)).getSliderValue());
+		this.showcase.setMobScale(((GuiSliderHorizon)this.buttonList.get(3)).getSliderValue() * 2.0F);
+		this.showcase.setMobTranslate(((GuiSliderVertical)this.buttonList.get(4)).getSliderValue());
 
-		this.showcase.setMobColorRGB(((GuiSliderColor)this.controlList.get(5)).getSliderValue(), 0);
-		this.showcase.setMobColorRGB(((GuiSliderColor)this.controlList.get(6)).getSliderValue(), 1);
-		this.showcase.setMobColorRGB(((GuiSliderColor)this.controlList.get(7)).getSliderValue(), 2);
-		this.showcase.setDelay(((GuiSliderColor)this.controlList.get(8)).getSliderValue());
+		this.showcase.setMobColorRGB(((GuiSliderColor)this.buttonList.get(5)).getSliderValue(), 0);
+		this.showcase.setMobColorRGB(((GuiSliderColor)this.buttonList.get(6)).getSliderValue(), 1);
+		this.showcase.setMobColorRGB(((GuiSliderColor)this.buttonList.get(7)).getSliderValue(), 2);
+		this.showcase.setDelay(((GuiSliderColor)this.buttonList.get(8)).getSliderValue());
 		this.showcase.yaw = this.showcase.getDelay() > 0.0F ? this.showcase.yaw : 0.0D;
 
 		if (this.showcase.getMobRotationX() >= 360F && !this.showcase.isDoRotation())

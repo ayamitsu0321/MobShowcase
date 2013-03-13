@@ -3,24 +3,24 @@ package ayamitsu.mobshowcase.common;
 import java.util.Collection;
 import java.util.Iterator;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 public final class MobShowcaseRegistry
 {
-	private static boolean hasInit = false;
-	private static Multimap<Integer, IMobReturner> returnerMap;
+	private static Multimap<Integer, IMobReturner> returnerMap = HashMultimap.create();
 
 	public static void addReturner(int itemID, IMobReturner returner)
 	{
-		init();
 		returnerMap.put(Integer.valueOf(itemID), returner);
 	}
 
-	public static boolean contains(net.minecraft.item.ItemStack is)
+	public static boolean contains(ItemStack is)
 	{
-		init();
-
 		if (is == null)
 		{
 			return false;
@@ -29,9 +29,8 @@ public final class MobShowcaseRegistry
 		return returnerMap.containsKey(Integer.valueOf(is.itemID));
 	}
 
-	public static net.minecraft.entity.Entity getEntity(net.minecraft.item.ItemStack is, net.minecraft.world.World world)
+	public static Entity getEntity(ItemStack is, World world)
 	{
-		init();
 		Collection<IMobReturner> collection = returnerMap.get(Integer.valueOf(is.itemID));
 
 		if (collection != null && !collection.isEmpty())
@@ -39,7 +38,7 @@ public final class MobShowcaseRegistry
 			for (Iterator<IMobReturner> iterator = collection.iterator(); iterator.hasNext();)
 			{
 				IMobReturner returner = iterator.next();
-				net.minecraft.entity.Entity entity = returner.getEntity(is, world);
+				Entity entity = returner.getEntity(is, world);
 
 				if (entity != null)
 				{
@@ -51,14 +50,4 @@ public final class MobShowcaseRegistry
 		return null;
 	}
 
-	private static void init()
-	{
-		if (hasInit)
-		{
-			return;
-		}
-
-		hasInit = true;
-		returnerMap = HashMultimap.create();
-	}
 }
