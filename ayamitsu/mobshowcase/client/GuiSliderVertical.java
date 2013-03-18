@@ -33,8 +33,9 @@ public class GuiSliderVertical extends GuiButton
 		}
 
 		FontRenderer fontrenderer = mc.fontRenderer;
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.renderEngine.getTexture("/ayamitsu/mobshowcase/gui.png"));
+		//GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.renderEngine.getTexture("/ayamitsu/mobshowcase/gui.png"));
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		mc.renderEngine.func_98187_b("/ayamitsu/mobshowcase/gui.png");
 		boolean flag = par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width && par3 < this.yPosition + this.height;
 		int i = this.getHoverState(flag);
 		this.mouseDragged(mc, par2, par3);
