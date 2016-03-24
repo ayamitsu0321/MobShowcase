@@ -1,0 +1,9 @@
+{
+	"variants" : {
+		"normal" : { "model": "mobshowcase:mob_showcase_glass" },
+		"facing=north": { "model": "mobshowcase:mob_showcase_glass", "y": 0 },
+		"facing=south": { "model": "mobshowcase:mob_showcase_glass", "y": 180 },
+		"facing=west":  { "model": "mobshowcase:mob_showcase_glass", "y": 270 },
+		"facing=east":  { "model": "mobshowcase:mob_showcase_glass", "y": 90 }
+	}
+}

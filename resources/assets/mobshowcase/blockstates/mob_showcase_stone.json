@@ -1,0 +1,8 @@
+{
+	"variants" : {
+		"facing=north": { "model": "mobshowcase:mob_showcase_stone" },
+		"facing=south": { "model": "mobshowcase:mob_showcase_stone", "y": 180 },
+		"facing=west":  { "model": "mobshowcase:mob_showcase_stone", "y": 270 },
+		"facing=east":  { "model": "mobshowcase:mob_showcase_stone", "y": 90 }
+	}
+}
