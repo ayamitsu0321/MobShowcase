@@ -74,7 +74,8 @@ public final class MobShowcaseRegistry {
                 }
 
                 @Override
-                public void checkSessionLock() throws MinecraftException {}
+                public void checkSessionLock() throws MinecraftException {
+                }
 
                 @Override
                 public IChunkLoader getChunkLoader(WorldProvider provider) {
@@ -82,10 +83,12 @@ public final class MobShowcaseRegistry {
                 }
 
                 @Override
-                public void saveWorldInfoWithPlayer(WorldInfo worldInformation, NBTTagCompound tagCompound) {}
+                public void saveWorldInfoWithPlayer(WorldInfo worldInformation, NBTTagCompound tagCompound) {
+                }
 
                 @Override
-                public void saveWorldInfo(WorldInfo worldInformation) {}
+                public void saveWorldInfo(WorldInfo worldInformation) {
+                }
 
                 @Override
                 public IPlayerFileData getPlayerNBTManager() {
@@ -93,7 +96,8 @@ public final class MobShowcaseRegistry {
                 }
 
                 @Override
-                public void flush() {}
+                public void flush() {
+                }
 
                 @Override
                 public File getWorldDirectory() {
@@ -137,7 +141,7 @@ public final class MobShowcaseRegistry {
 
             @Override
             public boolean accept(ItemStack is) {
-                return is.getItem() == Items.egg;
+                return is.getItem() == Items.EGG;
             }
 
             @Override
@@ -152,7 +156,7 @@ public final class MobShowcaseRegistry {
 
             @Override
             public boolean accept(ItemStack is) {
-                if (is.getItem() != Items.spawn_egg) return false;
+                if (is.getItem() != Items.SPAWN_EGG) return false;
 
                 String name = ItemMonsterPlacer.getEntityIdFromItem(is);
                 return name != null && EntityList.isStringValidEntityName(name);
@@ -161,7 +165,7 @@ public final class MobShowcaseRegistry {
             @Override
             public Entity getEntity(ItemStack is, World world) {
                 String name = ItemMonsterPlacer.getEntityIdFromItem(is);
-                Entity entity = EntityList.func_188429_b(name, world);
+                Entity entity = EntityList.createEntityByName(name, world);
 
                 if (entity instanceof EntitySkeleton)
                     ((EntitySkeleton)entity).onInitialSpawn(world.getDifficultyForLocation(dummyBlockPos), null);
@@ -176,7 +180,7 @@ public final class MobShowcaseRegistry {
 
             @Override
             public boolean accept(ItemStack is) {
-                return is.getItem() instanceof ItemBlock && Block.getBlockFromItem(is.getItem()) == Blocks.dragon_egg;
+                return is.getItem() instanceof ItemBlock && Block.getBlockFromItem(is.getItem()) == Blocks.DRAGON_EGG;
             }
 
             @Override
@@ -186,7 +190,6 @@ public final class MobShowcaseRegistry {
 
         });
     }
-
 
 
 }

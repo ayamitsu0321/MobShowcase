@@ -1,14 +1,9 @@
 package ayamitsu.mobshowcase.inventory;
 
 import ayamitsu.mobshowcase.registry.MobShowcaseRegistry;
-import ayamitsu.mobshowcase.tileentity.MobShowcaseBaseLogic;
 import ayamitsu.mobshowcase.tileentity.TileEntityMobShowcase;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 
 /**

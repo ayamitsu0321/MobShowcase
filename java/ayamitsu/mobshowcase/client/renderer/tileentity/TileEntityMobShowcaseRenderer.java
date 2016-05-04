@@ -1,15 +1,10 @@
 package ayamitsu.mobshowcase.client.renderer.tileentity;
 
-import ayamitsu.mobshowcase.block.BlockMobShowcase;
 import ayamitsu.mobshowcase.tileentity.TileEntityMobShowcase;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 
 /**
  * Created by ayamitsu0321 on 2016/03/23.

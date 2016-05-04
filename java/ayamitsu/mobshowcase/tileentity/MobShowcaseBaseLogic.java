@@ -4,17 +4,11 @@ import ayamitsu.mobshowcase.block.BlockMobShowcase;
 import ayamitsu.mobshowcase.registry.MobShowcaseRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProviderSurface;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-
-import java.util.List;
 
 /**
  * Created by ayamitsu0321 on 2016/03/23.
