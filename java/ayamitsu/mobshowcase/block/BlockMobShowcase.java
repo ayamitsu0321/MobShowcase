@@ -41,6 +41,9 @@ public class BlockMobShowcase extends BlockContainer {
 
     public BlockMobShowcase(Material blockMaterialIn, MapColor blockMapColorIn) {
         super(blockMaterialIn, blockMapColorIn);
+        this.useNeighborBrightness = true;
+        this.translucent = true;
+        this.setLightOpacity(0);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }
 
